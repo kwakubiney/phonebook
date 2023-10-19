@@ -11,7 +11,7 @@ __pycache__/
 /media/
 
 # Virtual environment
-venv/
+/venv/
 env/
 
 # IDE or text editor specific files
@@ -33,3 +33,4 @@ db.sqlite3
 # System files
 .DS_Store
 Thumbs.db
+.venv
