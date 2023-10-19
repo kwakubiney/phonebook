@@ -11,7 +11,7 @@ __pycache__/
 /media/
 
 # Virtual environment
-venv/
+/venv/
 env/
 
 # IDE or text editor specific files
