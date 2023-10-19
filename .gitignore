@@ -1,0 +1,35 @@
+# Django development files
+*.pyc
+*.pyo
+__pycache__/
+*.db.sqlite3
+
+# Static files (collectstatic)
+/static/
+
+# Media files (user-uploaded content)
+/media/
+
+# Virtual environment
+venv/
+env/
+
+# IDE or text editor specific files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.log
+*.swp
+
+# Database configuration
+db.sqlite3
+
+# Secret keys
+*.env
+
+# System files
+.DS_Store
+Thumbs.db
