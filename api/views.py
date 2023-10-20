@@ -7,7 +7,6 @@ from api.permissions import IsAdminOrReadOnly, IsDeleteAllowed
 
 class PhoneBook(generics.GenericAPIView):
     serializer_class = PhoneBookSerializer
-    queryset = PhoneBookModel.objects.all()
     lookup_field = 'number'
     permission_classes = [IsAdminOrReadOnly]
 
