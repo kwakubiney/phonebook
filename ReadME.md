@@ -13,3 +13,4 @@
 
 3. Run `python3 manage.py runserver` to run the HTTP server
 
+[Project Demo](https://www.loom.com/share/42179b15bf684675a15b325cefef26fb?sid=1dc06fa2-f19a-4505-a67b-fb9d23794f0a)
