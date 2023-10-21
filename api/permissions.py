@@ -8,6 +8,6 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
 class IsDeleteAllowed(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.method == 'DELETE' and not request.user.is_staff:
+        if (request.method == 'DELETE' or request.method == "PATCH") and not request.user.is_staff:
             return False
         return True
