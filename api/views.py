@@ -7,12 +7,11 @@ from api.permissions import IsAdminOrReadOnly, IsDeleteAllowed
 
 class PhoneBook(generics.GenericAPIView):
     serializer_class = PhoneBookSerializer
-    lookup_field = 'number'
     permission_classes = [IsAdminOrReadOnly]
 
-    def get_phonebook_entry(self, number):
+    def get_phonebook_entry(self, pk):
         try:
-            return PhoneBookModel.objects.get(number=number)
+            return PhoneBookModel.objects.get(pk=pk)
         except:
             return None
 
@@ -32,31 +31,20 @@ class PhoneBook(generics.GenericAPIView):
         else:
             return Response({"status": "fail", "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-    def patch(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            phonebook_entry = self.get_phonebook_entry(serializer.validated_data['number'])
-            if phonebook_entry == None:
-                return Response({"status_code": 0, "message": f"phone number specified does not exist"}, status=status.HTTP_404_NOT_FOUND)
-            serializer.validated_data['updated_at'] = datetime.now()
-            serializer.save()
-            return Response({"status": "success", "data": serializer.data})
-        return Response({"status": "fail", "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class PhoneBookDetail(generics.GenericAPIView):
     queryset = PhoneBookModel.objects.all()
     serializer_class = PhoneBookSerializer
-    lookup_field = 'number'
     permission_classes = [IsDeleteAllowed]
 
-    def get_phonebook_entry(self, number):
+    def get_phonebook_entry(self, pk):
         try:
-            return PhoneBookModel.objects.get(number=number)
+            return PhoneBookModel.objects.get(pk=pk)
         except:
             return None 
 
-    def get(self, request, number):
-        phonebook_entry = self.get_phonebook_entry(number=number)
+    def get(self, request, pk):
+        phonebook_entry = self.get_phonebook_entry(pk=pk)
         if phonebook_entry == None:
             return Response({"status_code": 0, "message": f"phone number specified does not exist"}, status=status.HTTP_404_NOT_FOUND)
         serializer = self.serializer_class(phonebook_entry)
@@ -65,9 +53,22 @@ class PhoneBookDetail(generics.GenericAPIView):
         else:
             return Response({"status_code":1, "message": "active", "data":{"number": serializer.data["number"]}})
 
-    def delete(self, request, number):
-        phonebook_entry = self.get_phonebook_entry(number=number)
+    def delete(self, request, pk):
+        phonebook_entry = self.get_phonebook_entry(pk)
         if phonebook_entry == None:
             return Response({"status_code": 0, "message": f"phone number specified does not exist"}, status=status.HTTP_404_NOT_FOUND)
         phonebook_entry.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, pk):
+        phonebook_entry = self.get_phonebook_entry(pk)
+        if phonebook_entry == None:
+            return Response({"status_code": 0, "message": f"phone number specified does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.serializer_class(
+            phonebook_entry, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.validated_data['updatedAt'] = datetime.now()
+            serializer.save()
+            return Response({"status": "success", "data": serializer.data})
+        return Response({"status": "fail", "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
